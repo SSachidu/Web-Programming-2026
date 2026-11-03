@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>W04-DjangoTemplates.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> or <div class="page"></div> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="week-04-django-template-and-object-relational-mapping-orm">Week 04 Django Template and Object Relational Mapping (ORM)</h1>
+<h2 id="object-relational-mapping-orm">Object Relational Mapping (ORM)</h2>
+<p>Along with other common web frameworks Django uses Object Relational Mapping (ORM) to query and manipulate data. The ORM gives a direct mapping from Python classes and objects to database tables and tuples. The ORM enables the same Python code to be used to access many different database - we will look at how to modify the setting to use a postgres database latter. For full information on how to use the ORM API please refer to the <a href="https://docs.djangoproject.com/en/6.0/topics/db/queries/">Django Documentation</a>.</p>
+<p>We will use ORM queries to populate the data onto our web pages. We can test these ORM queries directly by using a python shell which can be started with the <code>manage.py</code> script:</p>
+<pre class="hljs"><code><div>python manage.py shell
+</div></code></pre>
+<h3 id="simple-orm-query">Simple ORM Query</h3>
+<p>From within the shell:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># Import our `Student` model</span>
+<span class="hljs-keyword">from</span> myApp.models <span class="hljs-keyword">import</span> Student
+
+<span class="hljs-comment"># Query the database and return all the students as a result set</span>
+students = Student.objects.<span class="hljs-built_in">all</span>()
+
+<span class="hljs-comment"># We can now access a single Student as if from an array.</span>
+student = students[<span class="hljs-number">0</span>]
+
+<span class="hljs-comment">#And then access the attributes of that object</span>
+<span class="hljs-built_in">print</span>( student.firstName )
+</div></code></pre>
+<h3 id="other-simple-queries">Other Simple Queries</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># Access a single object by id</span>
+student = Student.objects.get( <span class="hljs-built_in">id</span>=<span class="hljs-number">2</span> )
+
+<span class="hljs-comment"># Will throw an error if no object meets the criteria</span>
+<span class="hljs-comment"># pUniapp.models.Student.DoesNotExist: Student matching query does not exist.</span>
+
+<span class="hljs-comment"># Can use other attributes but again these can throw errors</span>
+student = Student.objects.get( age=<span class="hljs-number">18</span> )
+
+<span class="hljs-comment"># myApp.models.Student.MultipleObjectsReturned: get() returned more than one Pet -- it returned more than 20!</span>
+</div></code></pre>
+<h3 id="handling-non-unique-returns">Handling non unique returns</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># Use the filter method which returns a ResultSet</span>
+student = Student.objects.<span class="hljs-built_in">filter</span>(age=<span class="hljs-number">18</span>)
+
+<span class="hljs-built_in">print</span>(student)
+<span class="hljs-comment"># &lt;QuerySet [&lt;Student: Student object (24)&gt;, &lt; Student : Student object (38)&gt;, &lt; Student : Student object …</span>
+
+<span class="hljs-built_in">print</span>(student[<span class="hljs-number">1</span>].firstName)
+<span class="hljs-comment">#Joshua</span>
+</div></code></pre>
+<h3 id="handling-relationships">Handling Relationships</h3>
+<pre class="hljs"><code><div>student = Student.objects.get( <span class="hljs-built_in">id</span>=<span class="hljs-number">7</span> )
+
+<span class="hljs-comment"># Note use of the all here so we have an iterable result set</span>
+modules = student.modules.<span class="hljs-built_in">all</span>()
+
+<span class="hljs-built_in">print</span>( modules )
+<span class="hljs-comment"># &lt;QuerySet [&lt;Module: Module object (3)&gt;, &lt; Module : Module object (4)&gt;]&gt;</span>
+
+<span class="hljs-built_in">print</span>( modules[<span class="hljs-number">1</span>].name )
+<span class="hljs-comment"># Introduction to Programming</span>
+
+<span class="hljs-comment"># Or iterate over them</span>
+<span class="hljs-keyword">for</span> module <span class="hljs-keyword">in</span> modules:
+    <span class="hljs-built_in">print</span>( <span class="hljs-string">f&quot;<span class="hljs-subst">{module.code.upper()}</span> <span class="hljs-subst">{module.name.capitalize()}</span>&quot;</span> )
+
+<span class="hljs-comment"># MOD002691 Final project</span>
+<span class="hljs-comment"># MOD003212 Introduction to programming</span>
+</div></code></pre>
+<h2 id="url-path-handling">URL Path Handling</h2>
+<p>URL's are defined on an App by App basis in a Python modules called <code>URLconf</code>. This uses definitions in Python that maps between URLs and views. We currently have two apps <code>admin</code> and <code>myApp</code>. Our current <code>project.urls.py</code> file just maps to the admin app:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> django.contrib <span class="hljs-keyword">import</span> admin
+<span class="hljs-keyword">from</span> django.urls <span class="hljs-keyword">import</span> path
+
+urlpatterns = [
+    path(<span class="hljs-string">&quot;admin/&quot;</span>, admin.site.urls),
+]
+</div></code></pre>
+<p>We need to modify this file so that a new <code>urls.py</code> in our new app is included. This requires us to import 'include' from djongo.urls and then include this new file mapped as to a default empty path:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> django.contrib <span class="hljs-keyword">import</span> admin
+<span class="hljs-keyword">from</span> django.urls <span class="hljs-keyword">import</span> include, path
+
+urlpatterns = [
+    path(<span class="hljs-string">&quot;&quot;</span>, include(<span class="hljs-string">&quot;myApp.urls&quot;</span>)),
+    path(<span class="hljs-string">&quot;admin/&quot;</span>, admin.site.urls),
+]
+</div></code></pre>
+<p>We then can create the new file <code>myApp.urls.py</code>:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> django.contrib <span class="hljs-keyword">import</span> admin
+<span class="hljs-keyword">from</span> django.urls <span class="hljs-keyword">import</span> path
+
+<span class="hljs-keyword">from</span> . <span class="hljs-keyword">import</span> views
+
+urlpatterns = [
+    path(<span class="hljs-string">&#x27;&#x27;</span>, views.home, name=<span class="hljs-string">&quot;home&quot;</span>),
+    path(<span class="hljs-string">&#x27;myApp/&lt;int:student_id&gt;/&#x27;</span>, views.student_detail, name=<span class="hljs-string">&#x27;student_detail&#x27;</span>),
+]
+</div></code></pre>
+<p>URL patterns are checked in order top to bottom. The include myApp.urls in the project urls.py means that the paths within that file are analysed first. If a pattern is matched, the function is called, so if there is nothing appended to the site's URL the function <code>myApp.views.home</code> is called. In the angle brackets we are using an Integer type so will match with any integer here - the value here is then assigned to the variable student_id in our view function. This means that if we append <code>myApp/2</code> to the site's URL the function <code>myApp.views.student_detail</code> will be called with a passed parameter <code>student_detail</code> which has a value of <strong>2</strong>. Other converter types can be found in the <a href="https://docs.djangoproject.com/en/6.0/topics/http/urls/#path-converters">Django documentation</a>. If the bottom is reached without a match a HTTP 404 is returned.</p>
+<h3 id="quick-test-for-url-paths">Quick Test for URL Paths</h3>
+<p>We can quickly test these URL paths are working by creating a couple of simple functions in <code>myApp.views.py</code> to send some simple html to the browser:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># not being used yet need templates first</span>
+<span class="hljs-keyword">from</span> django.shortcuts <span class="hljs-keyword">import</span> render
+
+<span class="hljs-comment"># just testing that the URL routing is working for now</span>
+<span class="hljs-keyword">from</span> django.http <span class="hljs-keyword">import</span> HttpResponse
+
+<span class="hljs-keyword">from</span> .models <span class="hljs-keyword">import</span> Student 
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">home</span>(<span class="hljs-params">request</span>):
+    <span class="hljs-keyword">return</span> HttpResponse(<span class="hljs-string">&quot;&lt;h1&gt;This is my home page!&lt;/h1&gt;&quot;</span>) 
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">student_detail</span>(<span class="hljs-params">request, student_id</span>):
+    <span class="hljs-comment"># Response with pet number</span>
+    <span class="hljs-keyword">return</span> HttpResponse(<span class="hljs-string">F&quot;&lt;h1&gt;Student Number: <span class="hljs-subst">{student_id}</span>&quot;</span>)
+</div></code></pre>
+<p>Then trying some simple urls:</p>
+<ol>
+<li>http://127.0.0.1:8000/ -  should display a heading &quot;This is my home page!&quot;</li>
+<li>http://127.0.0.1:8000/myApp/4/ - should display a heading &quot;Student Number: 4&quot;</li>
+<li>http://127.0.0.1:8000/bob/ - Should display a simple 404 message:</li>
+</ol>
+<p><img src="./images/bob-404.png" alt="404 message"></p>
+<h2 id="templates">Templates</h2>
+<h3 id="the-home-page">The Home Page</h3>
+<p>We would like a home page that lists every student by name, with links to details about each student. For this we need to create a <code>home.html</code> page and then render it, so:</p>
+<ol>
+<li>Change the <code>myApp.views.home</code> function to perform an ORM query to get the students and pass that to a page for rendering.</li>
+<li>Create a <code>home.html</code> template that handles this list and displays our data.</li>
+</ol>
+<h4 id="myappviewshome">myApp.views.home</h4>
+<pre class="hljs"><code><div><span class="hljs-keyword">def</span> <span class="hljs-title function_">home</span>(<span class="hljs-params">request</span>):
+    <span class="hljs-comment"># perform an ORM query to get all the students </span>
+    students = Student.objects.<span class="hljs-built_in">all</span>()
+
+    <span class="hljs-comment"># call render method defining template to use</span>
+    <span class="hljs-comment"># &#x27;home.html and pass pets through as an argument # in a dictionary</span>
+    <span class="hljs-keyword">return</span> render(request,	<span class="hljs-string">&#x27;home.html&#x27;</span>, {<span class="hljs-string">&#x27;students&#x27;</span>:students,})
+</div></code></pre>
+<p>Django templates have their own syntax - see the <a href="https://docs.djangoproject.com/en/6.0/ref/templates/language/">Django Documentation</a> for full details.</p>
+<p>When the template engine encounters a variable, it evaluates that variable and replaces it with the result - variables are surrounded with two curly braces <code>{{variable}}</code>, You can modify variables for display by using filters. Filters can be “chained.” The output of one filter is applied to the next <code>{{variable | filter}}</code></p>
+<p>Tags are more complex than variables: Some create text in the output, some control flow by performing loops or logic, and some load external information into the template to be used by later variables. <code>{% tag %}</code></p>
+<p>Templates are stored in a directory within each app. So we need to create the directory <code>myApp/templates</code> and then within there create a new file <code>home.html</code>.</p>
+<pre class="hljs"><code><div><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-comment">&lt;!-- Normal header stuff --&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Nigel&#x27;s University<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>My University<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+        {% for student in students %}
+            <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;{% url &#x27;student_detail&#x27; student.id %}&quot;</span>&gt;</span>
+                {{student.firstName|capfirst}} {{student.lastName|upper}}<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+        {% endfor %}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</div></code></pre>
+<h4 id="template-notes">Template Notes</h4>
+<p>Note the for - endfor tags and the use of the passed variable complete with filters. Also the use of the url tag to build up the url to call though to the student details page</p>
+<p>This should change the home page to:</p>
+<p><img src="./images/homepage.png" alt="Home Page"></p>
+<p>And clicking on Connie JAMES should result in:</p>
+<p><img src="./images/connieJane-num.png" alt="Connie James"></p>
+<h3 id="template-inheritance">Template Inheritance</h3>
+<p>Often, we have websites with common headers and footers, Django enables you to use inheritance.
+A ‘base’ page can define common content, identifying specific blocks which then can be filled with our specific html files</p>
+<p>So we can create a base template <code>myApp.templates.base.html</code>:</p>
+<pre class="hljs"><code><div><span class="hljs-meta">&lt;!doctype <span class="hljs-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-comment">&lt;!-- Normal header stuff --&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-comment">&lt;!-- Common body header stuff --&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>My University<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+     
+    {% block content %}
+    {% endblock %}
+
+    <span class="hljs-comment">&lt;!-- Common footer stuff --&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</div></code></pre>
+<p>Then modify <code>myApp.templates.home.html</code> to:</p>
+<pre class="hljs"><code><div>{% extends &quot;base.html&quot; %}
+{% block content %}
+    <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+        {% for student in students %}
+            <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;{% url &#x27;student_detail&#x27; student.id %}&quot;</span>&gt;</span>
+                   {{student.firstName|capfirst}} {{student.lastName|upper}}<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+        {% endfor %}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+{% endblock %}
+</div></code></pre>
+<h4 id="modify-views-for-student-details">Modify Views for Student Details</h4>
+<p>We now need to use the passed <code>student_id</code> parameter to fetch the specific student details from the data base and pass it to a new template to be rendered:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># needed for 404 response</span>
+<span class="hljs-comment"># from django.http import Http404 </span>
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">student_detail</span>(<span class="hljs-params">request, student_id</span>):
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-comment"># perform an ORM query to get a specific student</span>
+        student = Student.objects.get(<span class="hljs-built_in">id</span>=student_id)
+
+    <span class="hljs-keyword">except</span> Student.DoesNotExist:
+        <span class="hljs-keyword">raise</span> Http404(<span class="hljs-string">f&quot;Student <span class="hljs-subst">{student_id }</span> not found!&quot;</span>)
+
+    <span class="hljs-keyword">return</span> render(request, <span class="hljs-string">&quot;student_detail.html&quot;</span>, {<span class="hljs-string">&#x27;student’:student})
+</span></div></code></pre>
+<p>We then just need to create a new template file <code>myApp.template.student_detail.html</code> to create something similar to:</p>
+<p><img src="./images/studentDetailsPage.png" alt="student details page"></p>
+<p>Remember for the many relationship to modules you will need to get an object you can iterate over so use the following:</p>
+<pre class="hljs"><code><div>  {% for module in student.modules.all %}
+</div></code></pre>
+
+</body>
+</html>

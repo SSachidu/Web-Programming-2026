@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>W06-Django-Forms.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> or <div class="page"></div> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="week-06-django-forms">Week 06 Django Forms</h1>
+<h2 id="html-forms">HTML Forms</h2>
+<p>Forms are used to provide the user with interactive elements and controls - enabling the input and modification of data. Ky attribtes:</p>
+<ul>
+<li>name – Cannot be an empty string and must be unique amongst the form elements</li>
+<li>action – The URL that process the form data</li>
+</ul>
+<p>See <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form">Mozilla.org</a> for full details.</p>
+<p>Within the <code>&lt;form&gt;</code> element we can define multiple input types, see <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input">Mozilla.org</a> for a complete list of these.</p>
+<h3 id="the-form-method-attribute">The Form Method Attribute</h3>
+<p>This defines the HTTP method to submit the form with. The only allowed methods/values are (case insensitive):</p>
+<ul>
+<li>post: The POST method; form data sent as the request body.</li>
+<li>get (default): The GET; form data appended to the action URL with a ? separator. Use this method when the form has no side effects.</li>
+<li>dialog: When the form is inside a <code>&lt;dialog&gt;</code>, closes the dialog and causes a submit event to be fired on submission, without submitting data or clearing the form.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form#method">Mozilla.org</a></li>
+</ul>
+<h4 id="html-post-v-get">HTML POST v GET</h4>
+<p>We have been using GET requests as a matter of course in our current application – these can be seen in the terminal we run our server in:</p>
+<pre class="hljs"><code><div>18/Jun/2026 12:52:38] &quot;GET /student/543/ HTTP/1.1&quot; 200 1734
+</div></code></pre>
+<p>As mentioned above if we use GET to pass data from a user input for the data will be appended to the URL in plain text for all to see.</p>
+<ul>
+<li>
+<p>Clearly a security risk</p>
+<pre class="hljs"><code><div>https://example.com/login?username=alice&amp;password=SuperSecret123
+</div></code></pre>
+</li>
+<li>
+<p>Could also be visible in</p>
+<ul>
+<li>Browser address bar, browser history, server logs, proxy logs …</li>
+</ul>
+</li>
+</ul>
+<p>With a HTML POST the data is not visible in the URL but encoded in the actual request.
+See <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods/POST">mozilla.org</a> for more details.</p>
+<p>As such when using forms always use POST to send data rather than GET. For high security applications it would be best to use HTTPS rather than plain HTTP. We have been using POST when entering our user name and password into the admin app:</p>
+<pre class="hljs"><code><div>[18/Jun/2026 13:09:52] &quot;GET /admin/ HTTP/1.1&quot; 302 0
+[18/Jun/2026 13:09:52] &quot;GET /admin/login/?next=/admin/ HTTP/1.1&quot; 200 4080
+[18/Jun/2026 13:09:52] &quot;GET /static/admin/css/login.css HTTP/1.1&quot; 304 0
+[18/Jun/2026 13:10:03] &quot;POST /admin/login/?next=/admin/ HTTP/1.1&quot; 302 0
+[18/Jun/2026 13:10:03] &quot;GET /admin/ HTTP/1.1&quot; 200 8767
+</div></code></pre>
+<h2 id="django-forms">Django Forms</h2>
+<p>Django has a form class:</p>
+<ul>
+<li>Looks a lot like a Model</li>
+<li>Describes a form and determines how it works and appears.</li>
+<li>A form’s fields are themselves classes; they manage form data and perform validation when a form is submitted.</li>
+<li>A form field is represented to a user in the browser as an HTML “widget”</li>
+<li>Can be bound to a Model</li>
+<li>See the <a href="https://docs.djangoproject.com/en/6.0/topics/forms/">Django documentation</a> for more details.</li>
+</ul>
+<h3 id="typical-view-to-handle-post-data">Typical view to handle POST data</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> django.http <span class="hljs-keyword">import</span> HttpResponseRedirect
+<span class="hljs-keyword">from</span> django.shortcuts <span class="hljs-keyword">import</span> render
+
+<span class="hljs-keyword">from</span> .forms <span class="hljs-keyword">import</span> NameForm
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">get_name</span>(<span class="hljs-params">request</span>):
+    <span class="hljs-comment"># if this is a POST request we need to process the form data</span>
+    <span class="hljs-keyword">if</span> request.method == <span class="hljs-string">&quot;POST&quot;</span>:
+        <span class="hljs-comment"># create a form instance and populate it with data from the request:</span>
+        form = NameForm(request.POST)
+        <span class="hljs-comment"># check whether it&#x27;s valid:</span>
+        <span class="hljs-keyword">if</span> form.is_valid():
+            <span class="hljs-comment"># process the data in form.cleaned_data as required</span>
+            <span class="hljs-comment"># ...</span>
+            <span class="hljs-comment"># redirect to a new URL:</span>
+            <span class="hljs-keyword">return</span> HttpResponseRedirect(<span class="hljs-string">&quot;/thanks/&quot;</span>)
+    <span class="hljs-comment"># if a GET (or any other method) we&#x27;ll create a blank form</span>
+    <span class="hljs-keyword">else</span>:
+        form = NameForm()
+
+    <span class="hljs-keyword">return</span> render(request, <span class="hljs-string">&quot;name.html&quot;</span>, {<span class="hljs-string">&quot;form&quot;</span>: form})
+</div></code></pre>
+<h3 id="walkthrough-for-a-student">Walkthrough for a Student</h3>
+<p>At the moment we have a simple student_detail.html template that just presents the data for an individual student. We be able to edit the data.</p>
+<ol>
+<li>Add an edit option to the student list</li>
+<li>Create a form class that is bound to our model for Student</li>
+<li>Create a view to instantiate a form and pass it to our template</li>
+<li>Create a template to display the form</li>
+<li>Handle the return to be able to save the edits to the database</li>
+</ol>
+<h4 id="edit-option-to-the-student-list-template">Edit option to the student list template</h4>
+<p><code>student_list.html</code></p>
+<pre class="hljs"><code><div>{% for student in page_obj %}
+   <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>                  
+      <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;row&quot;</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;{% url &#x27;myApp:student_detail’  
+                                         student.id %}&quot;</span>&gt;</span>
+          {{student.id}}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>{{student.firstName|capfirst}}<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>{{student.lastName|upper}}<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>
+         <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;btn btn-light&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Edit&quot;</span>     
+                <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;location.href=&#x27;{% url &#x27;myApp:student_edit’  student.id %}&#x27;&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+   <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+{% endfor %}
+</div></code></pre>
+<h4 id="create-a-form-class">Create a form class</h4>
+<p><code>forms.py</code></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> django <span class="hljs-keyword">import</span> forms
+<span class="hljs-keyword">from</span> django.forms <span class="hljs-keyword">import</span> fields 
+
+<span class="hljs-keyword">from</span> .models <span class="hljs-keyword">import</span> Student, Module
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">StudentEditForm</span>(forms.ModelForm): 
+    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Meta</span>:
+        model = Student
+        fields = [<span class="hljs-string">&#x27;firstName&#x27;</span>, 
+                  <span class="hljs-string">&#x27;lastName&#x27;</span>, 
+                  <span class="hljs-string">&#x27;age&#x27;</span>,
+                  <span class="hljs-string">&#x27;email&#x27;</span>,
+                  <span class="hljs-string">&#x27;enrolmentDate&#x27;</span>,
+                  <span class="hljs-string">&#x27;modules&#x27;</span>,
+                  <span class="hljs-string">&#x27;image&#x27;</span>, ]
+</div></code></pre>
+<h4 id="create-a-view-to-instantiate-a-form">Create a view to instantiate a form</h4>
+<p><code>views.py</code></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> .forms <span class="hljs-keyword">import</span> StudentEditForm
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">student_edit</span>(<span class="hljs-params">request, student_id</span>):
+
+    studentForm =  StudentEditForm()
+    context={<span class="hljs-string">&#x27;studentForm&#x27;</span>:studentForm, <span class="hljs-string">&#x27;student_id&#x27;</span>:student_id}
+
+    <span class="hljs-keyword">return</span> render(request, <span class="hljs-string">&quot;student_edit.html&quot;</span>, context )
+</div></code></pre>
+<h4 id="template-to-display-the-form">Template to display the form</h4>
+<p><code>sudent_edit.html</code></p>
+<pre class="hljs"><code><div>{% extends &quot;base.html&quot; %}
+
+{% block content %}    
+
+<span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">&quot;{% url &#x27;myApp:student_edit&#x27; student_id %}&quot;</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;POST&quot;</span> <span class="hljs-attr">enctype</span>=<span class="hljs-string">&quot;multipart/form-data&quot;</span> &gt;</span>
+    
+    {% csrf_token %}
+    {{ studentForm }}
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Edit Student&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+
+{% endblock %}
+</div></code></pre>
+<ul>
+<li>
+<p>The <code>csrf_token</code> is a cross site forgery token which is a security measure to stop man in the middle attacks see <a href="https://owasp.org/www-community/attacks/csrf">OWASP</a> for details. Because codespaces maps ports to web addresses it can appear as an attempt at cross site forgery so we must add the following to our <code>settings.py</code> file.</p>
+<pre class="hljs"><code><div>CSRF_TRUSTED_ORIGINS = [
+    <span class="hljs-string">&quot;http://localhost:8000&quot;</span>,
+    <span class="hljs-string">&quot;https://localhost:8000&quot;</span>,
+    <span class="hljs-string">&quot;https://*.app.github.dev&quot;</span>,
+]
+</div></code></pre>
+</li>
+<li>
+<p><em>nb</em> You must include the <code>enctype=&quot;multipart/form-data&quot;</code> attribute in the form otherwise our file upload will not work!</p>
+</li>
+</ul>
+<p>This results in the form as show below:</p>
+<p><img src="./images/defaultform.png" alt="default form"></p>
+<p>We can improve this by adding a date time picker widget. This requires adding the widget to the from's meta class:</p>
+<pre class="hljs"><code><div>widgets = {
+            <span class="hljs-string">&quot;enrolmentDate&quot;</span>: forms.DateTimeInput(attrs={<span class="hljs-string">&quot;type&quot;</span>:<span class="hljs-string">&quot;datetime-local&quot;</span>})
+          }
+</div></code></pre>
+<p>See the <a href="https://docs.djangoproject.com/en/6.0/ref/forms/widgets/">Django documentation</a> for other widget options.</p>
+<p><img src="./images/UpdatedForm.png" alt="Updated Form"></p>
+<p>We can also add bootstrap styling by installing <a href="https://django-crispy-forms.readthedocs.io/en/latest/">Crispy Forms</a>.</p>
+<h5 id="installing-crispy-forms">Installing crispy forms</h5>
+<p>Fist add the python libary:</p>
+<pre class="hljs"><code><div>pip install django-crispy-forms crispy-bootstrap5
+</div></code></pre>
+<p>Modify <code>setting.py</code> to enable the crispy forms:</p>
+<pre class="hljs"><code><div>INSTALLED_APPS = [
+    …
+    <span class="hljs-string">&quot;crispy_forms&quot;</span>,
+    <span class="hljs-string">&quot;crispy_bootstrap5&quot;</span>,
+    …
+]
+
+…
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = <span class="hljs-string">&quot;bootstrap5“
+CRISPY_TEMPLATE_PACK = &quot;</span>bootstrap5<span class="hljs-string">&quot;
+</span></div></code></pre>
+<p>Then load the crispy tags in your template:</p>
+<pre class="hljs"><code><div><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">&quot;{% url &#x27;myApp:student_edit&#x27; student_id %}&quot;</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;POST&quot;</span> <span class="hljs-attr">enctype</span>=<span class="hljs-string">&quot;multipart/form-data&quot;</span>&gt;</span>
+    {% csrf_token %}
+    {% load crispy_forms_tags %}
+    {{ studentForm|crispy }}
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Edit Student&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+</div></code></pre>
+<p>Giving a better looking result - you can also modify the appearance by using different widget to override the defaults.</p>
+<p><img src="./images/crispyform.png" alt="Crispy Form"></p>
+<h3 id="saving-the-data-to-the-database">Saving the data to the database</h3>
+<p>Modify the view:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> django.shortcuts <span class="hljs-keyword">import</span> get_object_or_404
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">student_edit</span>(<span class="hljs-params">request, student_id</span>):
+    student = get_object_or_404(Student, pk=student_id)
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&#x27;Loaded student image: <span class="hljs-subst">{student.image}</span>&#x27;</span>)
+    <span class="hljs-keyword">if</span> request.method == <span class="hljs-string">&quot;POST&quot;</span>:
+        <span class="hljs-comment"># create a form instance and populate it with data from the request:</span>
+        form = StudentEditForm(request.POST, request.FILES, instance=student)
+        <span class="hljs-comment"># check whether it&#x27;s valid:</span>
+        <span class="hljs-keyword">if</span> form.is_valid():
+            form.save()
+            <span class="hljs-comment"># Redirect to student details page showing edits</span>
+            <span class="hljs-keyword">return</span> redirect(<span class="hljs-string">&quot;myApp:student_detail&quot;</span>, student_id=student_id )
+    <span class="hljs-keyword">else</span>:
+        studentForm =  StudentEditForm(instance=student)
+    context={<span class="hljs-string">&#x27;studentForm&#x27;</span>:studentForm, <span class="hljs-string">&#x27;student_id&#x27;</span>:student_id}
+    <span class="hljs-keyword">return</span> render(request, <span class="hljs-string">&quot;student_edit.html&quot;</span>, context )
+</div></code></pre>
+<p>This code loads the current student from the database and populates the form with the object instance data if it is a GET, then sends that form to the template for rendering.</p>
+<p>On a POST the form is created with the posted data - it is important to note that we have included <code>request.FILES</code> as an argument here to ensure that uploading an image file work correctly, the <code>instance=student</code> ensures that the current student will be updated omitting this will create a new record in the database. The form data is then checked for validity and then saved to the database.</p>
+<h2 id="filtering-data-in-our-list-view">Filtering Data In Our List View</h2>
+<p>At the moment we have a list of students covering 100 pages so finding a single student is difficult or say all the the students enrolled on Web Programming.  Django provides a <a href="https://django-filter.readthedocs.io/en/stable/">Filter class</a> to enable us to achieve this easily. The implementation of these filters is very similar to that of the forms we have just looked at.</p>
+<ol>
+<li>Install Django filters</li>
+<li>Update the setting to enable us to use them</li>
+<li>Create a filter class which is tied to your model</li>
+<li>Filter your selection in your view</li>
+<li>Provide the user with an input form to enter filtering details in your template.</li>
+</ol>
+<h3 id="install-django-filters">Install Django filters</h3>
+<pre class="hljs"><code><div>pip install django-filter
+</div></code></pre>
+<h3 id="update-the-setting-to-enable-us-to-use-filters">Update the setting to enable us to use filters</h3>
+<p><code>settings.py</code></p>
+<pre class="hljs"><code><div>NSTALLED_APPS = [
+    ...
+    <span class="hljs-string">&quot;django_filters&quot;</span>,
+    ...
+]
+</div></code></pre>
+<h3 id="create-a-filter-class">Create a filter class</h3>
+<p>Create a new file <code>myApp/filters.py</code></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> django_filters
+
+<span class="hljs-keyword">from</span> .models <span class="hljs-keyword">import</span> Student
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">StudentFilter</span>(django_filters.FilterSet):
+ 
+    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Meta</span>:
+        model = Student
+        fields = {<span class="hljs-string">&#x27;firstName&#x27;</span> :[<span class="hljs-string">&#x27;icontains&#x27;</span>], 
+                  <span class="hljs-string">&#x27;lastName&#x27;</span> : [<span class="hljs-string">&#x27;icontains&#x27;</span>], 
+                  <span class="hljs-string">&#x27;age&#x27;</span> : [<span class="hljs-string">&#x27;lt&#x27;</span>, <span class="hljs-string">&#x27;gt&#x27;</span>],
+                  <span class="hljs-string">&#x27;modules__code&#x27;</span> : [<span class="hljs-string">&#x27;exact&#x27;</span>],
+                  <span class="hljs-string">&#x27;modules__name&#x27;</span> : [<span class="hljs-string">&#x27;icontains&#x27;</span>]
+        }
+</div></code></pre>
+<p>This will create a filter using the Student class as it's model, the fields attribute in the contained Meta class is a dictionary of attribute names and filter types. The filter types is a list of type names as defined in the <a href="https://docs.djangoproject.com/en/dev/ref/models/querysets/#id4">Django documentation</a>. The double underscore syntax shown here <code>modules__code</code> enables us to follow down the relationship fields to the underlying model so this is referencing the module.code attribute.</p>
+<h3 id="filter-the-selection-in-the-view">Filter the selection in the view</h3>
+<p><code>views.py</code></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">def</span> <span class="hljs-title function_">studentlist</span>(<span class="hljs-params">request, page</span>):
+    students = Student.objects.<span class="hljs-built_in">all</span>().order_by(<span class="hljs-string">&quot;lastName&quot;</span>)
+    <span class="hljs-built_in">filter</span> = StudentFilter(request.GET, queryset=students)
+
+    paginator = Paginator(<span class="hljs-built_in">filter</span>.qs, <span class="hljs-number">20</span>)
+    page_obj = paginator.get_page(page)
+    page_obj.adjusted_elided_pages = paginator.get_elided_page_range(page, on_each_side=<span class="hljs-number">1</span>, on_ends=<span class="hljs-number">1</span>)
+
+    context = {<span class="hljs-string">&quot;page_obj&quot;</span>: page_object, <span class="hljs-string">&quot;filter&quot;</span>:<span class="hljs-built_in">filter</span>}
+
+    <span class="hljs-keyword">return</span> render(request,<span class="hljs-string">&#x27;studentlist.html&#x27;</span>, context)
+</div></code></pre>
+<p>This only actually has three edits from our previous version:</p>
+<ol>
+<li>Create the filter <code>filter = StudentFilter(request.GET, queryset=students)</code> using the GET from our request and the student list.</li>
+<li>We then use the filter query set to instantiate our paginator <code>paginator = Paginator(filter.qs, 20)</code></li>
+<li>Then add the filter to the context to pass through to our template <code>context = {&quot;page_obj&quot;: page_object, &quot;filter&quot;:filter}</code></li>
+</ol>
+<h3 id="provide-the-user-with-an-input-form-to-enter-filtering-details">Provide the user with an input form to enter filtering details</h3>
+<p><code>studentlist.html</code></p>
+<pre class="hljs"><code><div>...
+    <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;get&quot;</span>&gt;</span>
+        {% load crispy_forms_tags %}
+        {{ filter.form | crispy }}
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+    
+    <span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;table table-striped table-hover&quot;</span>&gt;</span>
+      ...
+</div></code></pre>
+<p>This will provide the user with a simple form they can add data to filter on:</p>
+<p><img src="./images/blankFilterForm.jpg" alt="Blank Filter Form"></p>
+<p>Entering data into the form and pressing submit will present the user with suitablely filter data - here we have found all the students whoose first name contains &quot;and&quot; :</p>
+<p><img src="./images/FilteredData.jpg" alt="Filtered with &quot;and&quot;"></p>
+<p>However, pressing the next button looses the filtering options and we are presnted with our full list again.  Looking at the output in the terminal points us to the issue here:</p>
+<pre class="hljs"><code><div>[25/Jun/2026 12:17:23] <span class="hljs-string">&quot;GET /studentlist/1/ HTTP/1.1&quot;</span> 200 11302
+[25/Jun/2026 12:19:38] <span class="hljs-string">&quot;GET /studentlist/1/?firstName__icontains=and&amp;lastName__icontains=&amp;age__lt=&amp;age__gt=&amp;modules__code=&amp;modules__name__icontains= HTTP/1.1&quot;</span> 200 11814
+[25/Jun/2026 12:24:36] <span class="hljs-string">&quot;GET /studentlist/2/ HTTP/1.1&quot;</span> 200 11665
+</div></code></pre>
+<p>The first GET here is from our student button on the homepage, the second GET is from the submit from the filter form and contains the data the user entered <code>firstName__icontains=and</code>, the final get is from the next button in our paginator block.  We need to preserve the GET arguments. To do this we need to pass the query string from our view through to our template:</p>
+<pre class="hljs"><code><div>    querydict = request.GET.copy()
+    
+    context = {
+        <span class="hljs-string">&quot;filter&quot;</span>: <span class="hljs-built_in">filter</span>,
+        <span class="hljs-string">&quot;page_obj&quot;</span>: page_obj,
+        <span class="hljs-string">&quot;query_string&quot;</span>: urlencode(querydict),
+    }
+</div></code></pre>
+<p>Then modify all our link references to pass on this query string in our template:</p>
+<pre class="hljs"><code><div>href=&quot;{% url &#x27;myApp:studentlist&#x27; page_obj.next_page_number %}?{{ query_string }}&quot;
+</div></code></pre>
+<p>Resulting in a GET string similar to:</p>
+<pre class="hljs"><code><div>[25/Jun/2026 12:35:27] <span class="hljs-string">&quot;GET /studentlist/2/?firstName__icontains=and&amp;lastName__icontains=&amp;age__lt=&amp;age__gt=&amp;modules__code=&amp;modules__name__icontains= HTTP/1.1&quot;</span> 200 12751
+</div></code></pre>
+<p>If the user enters some data that returns no records at the moment we will get an error page, so we need to handle this so code similar to this in the template:</p>
+<pre class="hljs"><code><div>{% if page_obj.paginator.count == 0 %}
+      <span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;table table-striped table-hover&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">thead</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;thead-dark&quot;</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;col&quot;</span>&gt;</span>ID<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;col&quot;</span>&gt;</span>First Name<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;col&quot;</span>&gt;</span>Last Name<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">tbody</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;row&quot;</span> <span class="hljs-attr">colspan</span>=<span class="hljs-string">3</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;text-center&quot;</span>&gt;</span>No Records Returned.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">tbody</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;text-center&quot;</span>&gt;</span>No Records Returned.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+{% else %}
+      <span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;table table-striped table-hover&quot;</span>&gt;</span>
+        ...
+{% endif %}
+</div></code></pre>
+<p>Will result in a reasonable output for the user:</p>
+<p><img src="./images/Norecords.jpg" alt="No Records Returned"></p>
+<p>We can also override the default labels for the form by creating a constructor for our filter:</p>
+<pre class="hljs"><code><div>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, *args, **kwargs</span>):
+    <span class="hljs-built_in">super</span>().__init__(*args, **kwargs)
+
+    <span class="hljs-variable language_">self</span>.form.fields[<span class="hljs-string">&quot;firstName__icontains&quot;</span>].label = <span class="hljs-string">&quot;First Name&quot;</span>
+    <span class="hljs-variable language_">self</span>.form.fields[<span class="hljs-string">&quot;lastName__icontains&quot;</span>].label = <span class="hljs-string">&quot;Last Name&quot;</span>
+    <span class="hljs-variable language_">self</span>.form.fields[<span class="hljs-string">&quot;modules__code&quot;</span>].label = <span class="hljs-string">&quot;Module Code&quot;</span>
+    <span class="hljs-variable language_">self</span>.form.fields[<span class="hljs-string">&quot;modules__name__icontains&quot;</span>].label = <span class="hljs-string">&quot;Module Name&quot;</span>
+</div></code></pre>
+<p>You will need to know the names of the filters that have been created for you - if you add the line:</p>
+<pre class="hljs"><code><div><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Filter names: <span class="hljs-subst">{StudentFilter().form.fields.keys()}</span>)
+</span></div></code></pre>
+<p>These will be printed for you in the console e.g.:</p>
+<pre class="hljs"><code><div>Filter names: dict_keys([<span class="hljs-string">&#x27;firstName__icontains&#x27;</span>, <span class="hljs-string">&#x27;lastName__icontains&#x27;</span>, <span class="hljs-string">&#x27;age__lt&#x27;</span>, <span class="hljs-string">&#x27;age__gt&#x27;</span>, <span class="hljs-string">&#x27;modules__code&#x27;</span>, <span class="hljs-string">&#x27;modules__name__icontains&#x27;</span>])
+</div></code></pre>
+
+</body>
+</html>
